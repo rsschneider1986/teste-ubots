@@ -23,32 +23,35 @@ public class ExecuteTests extends TesteUbotsApplicationTests {
 	@Autowired
 	private SqsTemplate sqsTemplate;
 
-    @Autowired
-    private ProcessSolicitationService processSolicitationService;
+	@Autowired
+	private ProcessSolicitationService processSolicitationService;
 
 	@Test
 	void givenAStringPayloadToTeamCards_whenSend_shouldReceive() {
 		Solicitation solicitation = new Solicitation("cards");
 		sqsTemplate.send(to -> to.queue(Constants.QUEUE_TEAM_CARDS).payload(solicitation));
 		logger.info("Message sent with payload {}", solicitation);
-		await().atMost(Duration.ofSeconds(3)).until(() -> processSolicitationService.respondToSolicitation(solicitation));
+		await().atMost(Duration.ofSeconds(3))
+				.until(() -> processSolicitationService.respondToSolicitation(solicitation));
 	}
-	
-//	@Test
-//	void givenAStringPayloadToTeamLoan_whenSend_shouldReceive() {
-//		
-//		Solicitation solicitation = new Solicitation("loan");
-//		sqsTemplate.send(to -> to.queue(Constants.QUEUE_TEAM_LOAN).payload(solicitation));
-//		logger.info("Message sent with payload {}", solicitation);
-//		await().atMost(Duration.ofSeconds(3)).until(() -> processSolicitationService.respondToSolicitation(solicitation));
-//	}
-//	
-//	@Test
-//	void givenAStringPayloadToTeamOtherSubjects_whenSend_shouldReceive() {		
-//		Solicitation solicitation = new Solicitation("other subjects");
-//		sqsTemplate.send(to -> to.queue(Constants.QUEUE_TEAM_OTHER_SUBJECTS).payload(solicitation));
-//		logger.info("Message sent with payload {}", solicitation);
-//		await().atMost(Duration.ofSeconds(3)).until(() -> processSolicitationService.respondToSolicitation(solicitation));
-//	}
+
+	@Test
+	void givenAStringPayloadToTeamLoan_whenSend_shouldReceive() {
+
+		Solicitation solicitation = new Solicitation("loan");
+		sqsTemplate.send(to -> to.queue(Constants.QUEUE_TEAM_LOAN).payload(solicitation));
+		logger.info("Message sent with payload {}", solicitation);
+		await().atMost(Duration.ofSeconds(3))
+				.until(() -> processSolicitationService.respondToSolicitation(solicitation));
+	}
+
+	@Test
+	void givenAStringPayloadToTeamOtherSubjects_whenSend_shouldReceive() {
+		Solicitation solicitation = new Solicitation("other subjects");
+		sqsTemplate.send(to -> to.queue(Constants.QUEUE_TEAM_OTHER_SUBJECTS).payload(solicitation));
+		logger.info("Message sent with payload {}", solicitation);
+		await().atMost(Duration.ofSeconds(3))
+				.until(() -> processSolicitationService.respondToSolicitation(solicitation));
+	}
 
 }
